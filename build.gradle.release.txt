@@ -1,0 +1,27 @@
+// app/build.gradle (Groovy) -- dentro del bloque android { }
+signingConfigs {
+    release {
+        storeFile file('mock_release_key.jks')   // mismo nivel que build.gradle (carpeta app)
+        storePassword 'mock_store_123'           // ficticia; en proyectos reales NO se escribe aquí
+        keyAlias 'mock_alias'
+        keyPassword 'mock_key_123'
+    }
+}
+buildTypes {
+    release {
+        minifyEnabled true        // ofuscación y reducción de código (R8)
+        shrinkResources true      // elimina recursos no usados
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        signingConfig signingConfigs.release
+    }
+}
+
+// dentro de dependencies { }
+testImplementation 'junit:junit:4.13.2'
+
+// Keystore por línea de comandos (alternativa al asistente de Android Studio):
+// keytool -genkeypair -v -keystore mock_release_key.jks -alias mock_alias -keyalg RSA -keysize 2048 -validity 10000
+
+// Salidas:
+//   app/build/outputs/apk/release/app-release.apk
+//   app/build/outputs/mapping/release/mapping.txt
